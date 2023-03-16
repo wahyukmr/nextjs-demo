@@ -2,7 +2,7 @@ import { MongoClient } from "mongodb";
 
 export async function mongoClientDatabase() {
     const client = await MongoClient.connect(
-        `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.gn6lijv.mongodb.net/${process.env.DB_COLLECTION}?retryWrites=true&w=majority`
+        `mongodb+srv://${process.env.NEXT_PUBLIC_USER}:${process.env.NEXT_PUBLIC_PASSWORD}@cluster0.gn6lijv.mongodb.net/${process.env.NEXT_PUBLIC_COLLECTION}?retryWrites=true&w=majority`
     );
 
     const dataBase = client.db();

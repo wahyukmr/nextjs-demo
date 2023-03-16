@@ -4,9 +4,8 @@ export default async function handler(req, res) {
     if (req.method === "POST") {
         const requestData = req.body;
 
-        const client = await MongoClient.connect(
-            `${process.env.NEXT_PUBLIC_URL}`
-        );
+        const url = process.env.NEXT_PUBLIC_URL;
+        const client = await MongoClient.connect(url);
         const dataBase = client.db();
         const meetupCollection = dataBase.collection("meetups");
         await meetupCollection.insertOne(requestData);

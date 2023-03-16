@@ -21,9 +21,7 @@ export default function HomePage({ meetups }) {
 
 export async function getStaticProps() {
     try {
-        const url = process.env.NEXT_PUBLIC_URL;
-        const client = await MongoClient.connect(url);
-
+        const client = await MongoClient.connect(process.env.NEXT_PUBLIC_URL);
         const dataBase = client.db();
         const meetupCollection = dataBase.collection("meetups");
         const meetupsResult = await meetupCollection.find({}).toArray();

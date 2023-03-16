@@ -1,7 +1,7 @@
 // name-domain.com/
 import MeetupList from "@components/meetups/MeetupList";
+import { MongoClient } from "mongodb";
 import Head from "next/head";
-import { mongoClientDatabase } from "./api/new-meetup";
 
 export default function HomePage({ meetups }) {
     // Head adalah komponen memungkikan untuk menambahkan elemen head ke bagian halaman head. Semua elemen HTML head dapat ditambahkan ke komponen ini.
@@ -21,9 +21,12 @@ export default function HomePage({ meetups }) {
 
 export async function getStaticProps() {
     try {
-        const { collection, client } = await mongoClientDatabase();
+        const client = await MongoClient.connect(
+            `${process.env.NEXT_PUBLIC_URL}`
+        );
 
-        const meetupCollection = collection;
+        const dataBase = client.db();
+        const meetupCollection = dataBase.collection("meetups");
         const meetupsResult = await meetupCollection.find({}).toArray();
         client.close();
 

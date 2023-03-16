@@ -14,7 +14,7 @@ export default function NewMeetup() {
             headers: { "Content-Type": "application/json" },
         });
 
-        const data = await response.json();
+        await response.json();
 
         router.push("/");
     }

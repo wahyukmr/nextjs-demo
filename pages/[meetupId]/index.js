@@ -1,6 +1,7 @@
 import MeetupDetail from "@components/meetups/MeetupDetail";
-import { MongoClient, ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
 import Head from "next/head";
+import { mongoDataBase } from "pages/api/new-meetup";
 
 export default function DetailMeetup(props) {
     const { title, image, address, description } = props.meetupData;
@@ -21,10 +22,9 @@ export default function DetailMeetup(props) {
 }
 
 export async function getStaticPaths() {
-    const client = await MongoClient.connect(process.env.LOCAL_URL);
-    const dataBase = client.db();
-    const meetupCollection = dataBase.collection("meetups");
-    const selectIdMeetup = await meetupCollection
+    const { client, collection } = await mongoDataBase(`${process.env.DB_URL}`);
+
+    const selectIdMeetup = await collection
         .find()
         .project({ _id: 1 })
         .toArray(); // Yang berari mengambil objek dokumen yang hanya berisi id
@@ -40,10 +40,10 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-    const client = await MongoClient.connect(process.env.LOCAL_URL);
-    const dataBase = client.db();
-    const meetupCollection = dataBase.collection("meetups");
-    const selectIdMeetup = await meetupCollection.findOne({
+    const getId = context.params.meetupId;
+    const { client, collection } = await mongoDataBase(`${process.env.DB_URL}`);
+
+    const selectIdMeetup = await collection.findOne({
         _id: new ObjectId(getId),
     }); // Mendapatkan ObjectId yang dipilih
     client.close();
